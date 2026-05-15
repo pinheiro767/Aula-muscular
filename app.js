@@ -1,222 +1,330 @@
-
-let atual=1;
-let zoom=1;
-
-const total=44;
-
-const img=document.getElementById("slideImg");
-
-function criarSlides(){
-
-const grade=document.getElementById("grade");
-
-for(let i=1;i<=total;i++){
-
-const div=document.createElement("div");
-
-div.className="thumb";
-
-div.innerText=i;
-
-div.onclick=()=>abrir(i);
-
-grade.appendChild(div);
-
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
+html, body{
+  width:100%;
+  min-height:100%;
 }
 
-function abrir(n){
-
-atual=n;
-
-img.src=`imagens/${n}.png`;
-
-document.getElementById("tituloSlide").innerText=`Slide ${n}`;
-
-document.querySelectorAll(".thumb").forEach((e,index)=>{
-
-e.classList.toggle("active",index+1===n);
-
-});
-
-carregarDados();
-
-carregarNotas();
-
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#020617;
+  color:white;
+  overflow:hidden;
 }
 
-function carregarDados(){
-
-const c=document.getElementById("curiosidades");
-
-const casos=document.getElementById("casos");
-
-c.innerHTML="";
-casos.innerHTML="";
-
-dadosSlides[atual].curiosidades.forEach(t=>{
-
-const li=document.createElement("li");
-
-li.innerText=t;
-
-c.appendChild(li);
-
-});
-
-dadosSlides[atual].casos.forEach(t=>{
-
-const p=document.createElement("p");
-
-p.innerText=t;
-
-casos.appendChild(p);
-
-});
-
+/* TOPO */
+.topo{
+  min-height:70px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:10px 20px;
+  background:#0f172a;
+  border-bottom:1px solid #334155;
 }
 
-function proximo(){
-
-if(atual<total) abrir(atual+1);
-
+.topo h1{
+  font-size:clamp(18px, 2vw, 26px);
 }
 
-function anterior(){
-
-if(atual>1) abrir(atual-1);
-
+.topo p{
+  opacity:.8;
+  font-size:14px;
 }
 
-function zoomMais(){
-
-zoom+=0.2;
-
-img.style.transform=`scale(${zoom})`;
-
+.acoes-topo{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-function zoomMenos(){
-
-zoom=Math.max(0.5,zoom-0.2);
-
-img.style.transform=`scale(${zoom})`;
-
+button{
+  border:none;
+  padding:10px 14px;
+  border-radius:14px;
+  background:#2563eb;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
 }
 
-function fullscreen(){
-
-if(img.requestFullscreen){
-
-img.requestFullscreen();
-
+button:hover{
+  background:#1d4ed8;
+  transform:translateY(-1px);
 }
 
+/* LAYOUT GERAL */
+.layout{
+  display:grid;
+  grid-template-columns:300px minmax(0, 1fr);
+  height:calc(100vh - 70px);
+  overflow:hidden;
 }
 
-function salvarNotas(){
-
-localStorage.setItem("slide_"+atual,document.getElementById("notas").value);
-
-alert("Notas salvas");
-
+/* MENU LATERAL */
+.menu{
+  overflow-y:auto;
+  padding:15px;
+  background:#020617;
+  border-right:1px solid #334155;
 }
 
-function carregarNotas(){
-
-document.getElementById("notas").value=localStorage.getItem("slide_"+atual)||"";
-
+.grade{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:15px;
 }
 
-async function gerarPDF(){
-
-const { jsPDF } = window.jspdf;
-
-const pdf=new jsPDF("landscape");
-
-pdf.text("Ultra Atlas Muscular",10,10);
-
-pdf.addImage(img.src,"PNG",10,20,260,140);
-
-pdf.save(`slide_${atual}.pdf`);
-
+.thumb{
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:#111827;
+  border:1px solid #334155;
+  cursor:pointer;
+  font-weight:bold;
+  transition:.2s;
 }
 
-function toggleVoice(){
-
-const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-
-if(!SpeechRecognition){
-
-alert("Navegador sem reconhecimento de voz");
-
-return;
-
+.thumb:hover{
+  transform:scale(1.05);
+  background:#1e293b;
 }
 
-const rec=new SpeechRecognition();
-
-rec.lang="pt-BR";
-
-rec.start();
-
-rec.onresult=(e)=>{
-
-const texto=e.results[0][0].transcript.toLowerCase();
-
-if(texto.includes("próximo")) proximo();
-
-if(texto.includes("anterior")) anterior();
-
-if(texto.includes("zoom mais")) zoomMais();
-
-if(texto.includes("zoom menos")) zoomMenos();
-
-if(texto.includes("modo escuro")){
-
-document.body.style.background="#000";
-
+.thumb.active{
+  background:#2563eb;
+  border-color:#93c5fd;
 }
 
-const match=texto.match(/slide\s(\d+)/);
-
-if(match){
-
-abrir(parseInt(match[1]));
-
+.painel{
+  margin-top:20px;
+  padding:15px;
+  background:#111827;
+  border-radius:20px;
+  border:1px solid #334155;
 }
 
-};
-
+.painel li{
+  margin-top:8px;
+  margin-left:18px;
 }
 
-let deferredPrompt;
-
-window.addEventListener("beforeinstallprompt",(e)=>{
-
-e.preventDefault();
-
-deferredPrompt=e;
-
-});
-
-document.getElementById("btnInstall").onclick=async()=>{
-
-if(deferredPrompt){
-
-deferredPrompt.prompt();
-
+/* CONTEÚDO */
+.conteudo{
+  display:flex;
+  flex-direction:column;
+  padding:15px;
+  overflow-y:auto;
+  gap:15px;
+  min-width:0;
 }
 
-};
-
-if("serviceWorker" in navigator){
-
-navigator.serviceWorker.register("sw.js");
-
+/* ÁREA DO SLIDE */
+.viewer{
+  background:#000;
+  border-radius:25px;
+  padding:12px;
+  border:1px solid #334155;
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
 }
 
-criarSlides();
+.barra-slide{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+  flex-wrap:wrap;
+}
 
-abrir(1);
+.controles{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+/* CORREÇÃO PRINCIPAL: NÃO CORTA A IMAGEM */
+.imagem-box{
+  width:100%;
+  height:calc(100vh - 260px);
+  min-height:420px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:auto;
+  border-radius:20px;
+  background:#000;
+  padding:12px;
+}
+
+/* MOSTRA A FOTO INTEIRA */
+.imagem-box img{
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  border-radius:12px;
+  transition:transform .2s ease;
+  transform-origin:center center;
+}
+
+/* CASO USE ZOOM VIA JS */
+.imagem-box img.zoom{
+  max-width:none;
+  max-height:none;
+}
+
+/* CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:15px;
+}
+
+.card{
+  background:#111827;
+  padding:15px;
+  border-radius:20px;
+  border:1px solid #334155;
+  min-width:0;
+}
+
+.card h3{
+  margin-bottom:10px;
+  color:#93c5fd;
+}
+
+textarea{
+  width:100%;
+  min-height:170px;
+  resize:vertical;
+  border-radius:14px;
+  background:#020617;
+  color:white;
+  padding:10px;
+  border:1px solid #334155;
+  outline:none;
+}
+
+textarea:focus{
+  border-color:#60a5fa;
+}
+
+/* TABLET */
+@media(max-width:1100px){
+  .layout{
+    grid-template-columns:240px minmax(0, 1fr);
+  }
+
+  .grade{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .cards{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .imagem-box{
+    height:55vh;
+  }
+}
+
+/* CELULAR */
+@media(max-width:900px){
+  body{
+    overflow:auto;
+  }
+
+  .topo{
+    height:auto;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .layout{
+    display:flex;
+    flex-direction:column;
+    height:auto;
+    overflow:visible;
+  }
+
+  .menu{
+    height:auto;
+    max-height:280px;
+    border-right:none;
+    border-bottom:1px solid #334155;
+  }
+
+  .grade{
+    grid-template-columns:repeat(5,1fr);
+  }
+
+  .conteudo{
+    overflow:visible;
+  }
+
+  .imagem-box{
+    height:auto;
+    min-height:0;
+    max-height:none;
+  }
+
+  .imagem-box img{
+    width:100%;
+    height:auto;
+    max-height:none;
+    object-fit:contain;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+}
+
+/* CELULAR PEQUENO */
+@media(max-width:520px){
+  .topo{
+    padding:12px;
+  }
+
+  .acoes-topo,
+  .controles{
+    width:100%;
+  }
+
+  button{
+    flex:1;
+    padding:10px;
+    font-size:13px;
+  }
+
+  .grade{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .thumb{
+    height:52px;
+    font-size:13px;
+  }
+
+  .viewer{
+    border-radius:18px;
+    padding:8px;
+  }
+
+  .imagem-box{
+    padding:6px;
+    border-radius:14px;
+  }
+    }
