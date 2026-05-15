@@ -1,38 +1,47 @@
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html, body{
+  width:100%;
+  min-height:100%;
 }
 
 body{
-font-family:Arial;
-background:#020617;
-color:white;
-overflow:hidden;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#020617;
+  color:white;
+  overflow:hidden;
 }
 
+/* TOPO */
 .topo{
-height:70px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:10px 20px;
-background:#0f172a;
-border-bottom:1px solid #334155;
+  min-height:70px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:10px 20px;
+  background:#0f172a;
+  border-bottom:1px solid #334155;
 }
 
 .topo h1{
-font-size:24px;
+  font-size:clamp(18px, 2vw, 26px);
 }
 
 .topo p{
-opacity:.8;
+  opacity:.8;
+  font-size:14px;
 }
 
 .acoes-topo{
-display:flex;
-gap:10px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 button{
@@ -185,4 +194,23 @@ grid-template-columns:1fr;
 height:45vh;
 }
 
+}
+@media(max-width:600px){
+  body{
+    overflow:auto;
+  }
+
+  .topo{
+    height:auto;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .acoes-topo{
+    width:100%;
+  }
+
+  .acoes-topo button{
+    flex:1;
+  }
 }
