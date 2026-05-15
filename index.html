@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
 <title>Ultra Atlas Muscular</title>
 
 <link rel="manifest" href="manifest.json">
@@ -10,33 +18,60 @@
 
 <meta name="theme-color" content="#020617">
 
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </head>
 
 <body>
 
 <header class="topo">
-  <div>
-    <h1>Ultra Atlas Muscular</h1>
-    <p>Prof. Cláudia Pinheiro</p>
-  </div>
 
-  <div class="acoes-topo">
-    <button onclick="toggleVoice()">🎤 Voz</button>
-    <button onclick="gerarPDF()">📄 PDF</button>
-    <button id="btnInstall">📲 Instalar</button>
-  </div>
+<div class="topo-esquerda">
+<h1>Ultra Atlas Muscular</h1>
+<p>Prof. Cláudia Pinheiro</p>
+</div>
+
+<div class="acoes-topo">
+
+<button onclick="toggleVoice()">
+🎤 Voz
+</button>
+
+<button onclick="gerarPDF()">
+📄 PDF
+</button>
+
+<button id="btnInstall">
+📲 Instalar
+</button>
+
+</div>
+
 </header>
 
 <main class="layout">
 
+<!-- MENU -->
 <aside class="menu">
+
+<div class="menu-topo">
 <h2>Slides</h2>
+
+<p id="contadorSlides">
+1 / 20
+</p>
+</div>
 
 <div class="grade" id="grade"></div>
 
 <div class="painel">
-<h3>Comandos de voz</h3>
+
+<h3>🎙 Comandos de voz</h3>
 
 <ul>
 <li>"Próximo"</li>
@@ -44,54 +79,117 @@
 <li>"Zoom mais"</li>
 <li>"Zoom menos"</li>
 <li>"Abrir slide 12"</li>
+<li>"Tela cheia"</li>
 <li>"Modo escuro"</li>
 </ul>
+
 </div>
 
 </aside>
 
+<!-- CONTEÚDO -->
 <section class="conteudo">
 
+<!-- VISUALIZADOR -->
 <div class="viewer">
 
 <div class="barra-slide">
-<h2 id="tituloSlide">Slide 1</h2>
+
+<div>
+<h2 id="tituloSlide">
+Slide 1
+</h2>
+
+<p id="subtituloSlide">
+Sistema muscular
+</p>
+</div>
 
 <div class="controles">
-<button onclick="anterior()">◀</button>
-<button onclick="proximo()">▶</button>
-<button onclick="zoomMais()">＋</button>
-<button onclick="zoomMenos()">－</button>
-<button onclick="fullscreen()">⛶</button>
-</div>
+
+<button onclick="anterior()">
+◀
+</button>
+
+<button onclick="proximo()">
+▶
+</button>
+
+<button onclick="zoomMais()">
+＋
+</button>
+
+<button onclick="zoomMenos()">
+－
+</button>
+
+<button onclick="resetZoom()">
+⭯
+</button>
+
+<button onclick="fullscreen()">
+⛶
+</button>
+
 </div>
 
+</div>
+
+<!-- IMAGEM -->
 <div class="imagem-box" id="imagemBox">
 
-<img src="imagens/1.png" id="slideImg">
+<img
+src="imagens/1.png"
+id="slideImg"
+draggable="false"
+loading="lazy"
+>
 
 </div>
 
 </div>
 
+<!-- CARDS -->
 <div class="cards">
 
+<!-- CURIOSIDADES -->
 <div class="card">
-<h3>💡 Curiosidades</h3>
+
+<h3>
+💡 Curiosidades
+</h3>
+
 <ul id="curiosidades"></ul>
+
 </div>
 
+<!-- CASOS -->
 <div class="card">
-<h3>🩺 Casos Clínicos</h3>
+
+<h3>
+🩺 Casos Clínicos
+</h3>
+
 <div id="casos"></div>
+
 </div>
 
+<!-- NOTAS -->
 <div class="card">
-<h3>📝 Anotações</h3>
 
-<textarea id="notas"></textarea>
+<h3>
+📝 Anotações
+</h3>
 
-<button onclick="salvarNotas()">Salvar</button>
+<textarea
+id="notas"
+placeholder="Digite suas anotações..."
+></textarea>
+
+<button onclick="salvarNotas()">
+Salvar
+</button>
+
 </div>
 
 </div>
@@ -99,6 +197,15 @@
 </section>
 
 </main>
+
+<!-- LOADING -->
+<div id="loading">
+
+<div class="loader"></div>
+
+<p>Carregando Atlas...</p>
+
+</div>
 
 <script src="dados.js"></script>
 <script src="app.js"></script>
